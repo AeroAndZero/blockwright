@@ -536,7 +536,11 @@
   document.getElementById("save-btn").addEventListener("click", saveBlock);
   document.getElementById("cancel-btn").addEventListener("click", closeModal);
   document.getElementById("empty-character").addEventListener("click", function () {
-    mdInput.value += "\n&ZeroWidthSpace;";
+    mdInput.value = mdInput.value.slice(0, mdInput.selectionStart) 
+                    + "\n&ZeroWidthSpace; " 
+                    + mdInput.value.slice(mdInput.selectionEnd, mdInput.value.length);
+    updatePreview();
+    mdInput.focus();
   });
   document.getElementById("sample-link").addEventListener("click", function () {
     if (!mdInput.value.trim()) {
@@ -625,6 +629,9 @@
 
   function getTitle(){
     let title = localStorage.getItem(LS_TITLE);
+    if(title == null){
+      title = "Blockwright - resume builder";
+    }
     updateTitle(title);
   }
 
