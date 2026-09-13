@@ -17,6 +17,7 @@
   var LS_LIB = "blockwright.library.v1";
   var LS_CANVAS = "blockwright.canvas.v1";
   var LS_SEEDED = "blockwright.seeded.v1";
+  var LS_TITLE = "blockwright.title.v1";
 
   var storageOK = true;
   try {
@@ -30,6 +31,7 @@
   // ---------- State ----------
   var library = load(LS_LIB, []); // [{id, title, md}]
   var canvas = load(LS_CANVAS, []); // [{iid, blockId}]
+  var pageMargin = 16; // mm — page margin; intentionally NOT persisted
 
   function load(key, fallback) {
     if (!storageOK) return fallback;
@@ -80,6 +82,7 @@
   var pageInner = document.getElementById("page-inner");
   var page = document.getElementById("page");
   var pageCount = document.getElementById("pagecount");
+  var pageTitle = document.getElementById("inTitle");
 
   // ---------- Seed first-run examples ----------
   if (storageOK && !localStorage.getItem(LS_SEEDED) && library.length === 0) {
@@ -179,7 +182,10 @@
     var host = ev.target.closest(".lib-block");
     var id = host && host.dataset.blockId;
     if (!id) return;
-    if (btn.dataset.act === "edit") openModal(id);
+    if (btn.dataset.act === "edit") {
+      openModal(id);
+      console.log(id);
+    }
     if (btn.dataset.act === "del") deleteBlock(id);
   });
 
@@ -224,6 +230,9 @@
       '<span class="icon-btn cb-drag" title="Drag to reorder">' +
       ICON.drag +
       "</span>" +
+      '<button class="icon-btn cb-edit" data-act="edit" title="Edit">' +
+      ICON.edit +
+      "</button>" +
       '<button class="icon-btn cb-align" title="Align: ' +
       align +
       ' (click to change)">' +
@@ -294,8 +303,8 @@
   }
 
   function updatePageCount() {
-    // approx A4 content height = 297mm - 32mm padding = 265mm
-    var contentPx = 265 * 3.7795; // mm -> px @96dpi
+    // usable height = A4 height (297mm) minus top+bottom margin
+    var contentPx = (297 - 2 * pageMargin) * 3.7795; // mm -> px @96dpi
     var h = pageInner.scrollHeight;
     var pages = Math.max(1, Math.ceil(h / contentPx));
     pageCount.textContent = canvas.length
@@ -340,6 +349,10 @@
       syncCanvasFromDOM();
       if (canvas.length === 0) renderCanvas();
       return;
+    }
+
+    if(ev.target.closest(".cb-edit")){
+      openModal(node.dataset.blockId);
     }
 
     var alignBtn = ev.target.closest(".cb-align");
@@ -485,11 +498,11 @@
       titleEl.focus();
       return;
     }
-    if (!md.trim()) {
-      toast("Write some Markdown before saving.");
-      mdInput.focus();
-      return;
-    }
+    // if (!md.trim()) {
+    //   toast("Write some Markdown before saving.");
+    //   mdInput.focus();
+    //   return;
+    // }
     if (editingId) {
       var b = findBlock(editingId);
       if (b) {
@@ -522,6 +535,9 @@
     });
   document.getElementById("save-btn").addEventListener("click", saveBlock);
   document.getElementById("cancel-btn").addEventListener("click", closeModal);
+  document.getElementById("empty-character").addEventListener("click", function () {
+    mdInput.value += "\n&ZeroWidthSpace;";
+  });
   document.getElementById("sample-link").addEventListener("click", function () {
     if (!mdInput.value.trim()) {
       mdInput.value = SAMPLE;
@@ -582,6 +598,36 @@
     }
   });
 
+  // ---------- Page margin (not persisted) ----------
+  var marginRange = document.getElementById("marginRange");
+  var marginVal = document.getElementById("marginVal");
+  function applyMargin(mm) {
+    pageMargin = mm;
+    page.style.setProperty("--page-pad", mm + "mm");
+    marginVal.textContent = mm + " mm";
+    updatePageCount();
+  }
+  marginRange.addEventListener("input", function () {
+    applyMargin(parseInt(marginRange.value, 10) || 16);
+  });
+  applyMargin(parseInt(marginRange.value, 10) || 16); // initialise from default
+
+  // Change title
+  pageTitle.addEventListener("change", ()=>{
+    updateTitle(pageTitle.value);
+  })
+
+  function updateTitle(value){
+    document.title = value;
+    localStorage.setItem(LS_TITLE, value);
+    pageTitle.value = value;
+  }
+
+  function getTitle(){
+    let title = localStorage.getItem(LS_TITLE);
+    updateTitle(title);
+  }
+
   // ---------- Toast ----------
   var toastEl = document.getElementById("toast"),
     toastTimer;
@@ -597,6 +643,7 @@
   // ---------- Boot ----------
   renderLibrary();
   renderCanvas();
+  getTitle();
   if (!storageOK)
     toast("Private-mode browser: blocks won't be saved between sessions.");
 })();

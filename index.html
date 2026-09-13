@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Blockwright — Resume Builder</title>
-
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,10 +19,15 @@
   <!-- Toolbar -->
   <header class="toolbar">
     <div class="brand">
-      <span class="mark"><span></span></span>
+      <span class="mark"><img src="favicon.png"></span>
       <div>Blockwright<small>block-based resume builder</small></div>
     </div>
     <div class="toolbar-actions">
+      <div class="margin-ctrl" title="Page margin — applies to the exported PDF too">
+        <label for="marginRange">Margin</label>
+        <input type="range" id="marginRange" min="8" max="30" step="1" value="16" />
+        <span class="margin-val" id="marginVal">16 mm</span>
+      </div>
       <span class="pagecount" id="pagecount"></span>
       <button class="btn btn-ghost-light" id="clear-page-btn" title="Remove all blocks from the page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-9 0v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"/></svg>
@@ -38,6 +43,10 @@
   <div class="body">
     <!-- Left: block library -->
     <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-title">Title of the document</div>
+        <input type="text" value="Blockwright — Resume Builder" id="inTitle"/>
+      </div>
       <div class="sidebar-head">
         <div class="sidebar-title">Blocks <span class="n" id="lib-count"></span></div>
         <button class="btn btn-primary btn-block" id="new-block-btn">
@@ -74,6 +83,7 @@
       <div class="pane write">
         <div class="pane-label">
           <span>Markdown</span>
+          <a id="empty-character">Insert Empty Character</a>
           <a id="sample-link">Insert example</a>
         </div>
         <textarea id="md-input" spellcheck="false" placeholder="# Your name&#10;email@example.com · +1 555 000 0000 · City&#10;&#10;## Experience&#10;**Role — Company** *(2021–Present)*&#10;- What you did and the result you drove"></textarea>

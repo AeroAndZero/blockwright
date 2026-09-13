@@ -18,6 +18,7 @@
   --shadow-pop: 0 18px 50px rgba(20, 24, 33, 0.28);
   --ui: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --doc: Georgia, "Times New Roman", serif;
+  --page-pad: 16mm;
 }
 * {
   box-sizing: border-box;
@@ -76,17 +77,14 @@ button {
   height: 26px;
   border-radius: 7px;
   flex: 0 0 auto;
-  background: linear-gradient(150deg, var(--accent), #1aa79a);
   display: grid;
   place-items: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
-.brand .mark span {
-  width: 11px;
-  height: 11px;
-  border: 2px solid #fff;
-  border-radius: 2px;
-  transform: rotate(8deg);
+.brand .mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .brand small {
   display: block;
@@ -181,6 +179,12 @@ button {
 .sidebar-head {
   padding: 16px 16px 12px;
   border-bottom: 1px solid var(--line);
+}
+.sidebar-head input{
+  width: 100%;
+  padding: 5px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
 }
 .sidebar-title {
   display: flex;
@@ -336,7 +340,7 @@ button {
   background: var(--paper);
   box-shadow: var(--shadow-paper);
   border-radius: 2px;
-  padding: 16mm 18mm;
+  padding: var(--page-pad, 16mm);
   position: relative;
 }
 .page-inner {
@@ -412,6 +416,7 @@ button {
 }
 .canvas-block .cb-content {
   padding: 1px 0;
+  min-height: 12px;
 }
 .cb-content.align-left {
   text-align: left;
@@ -625,6 +630,7 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  height: 46vh;
 }
 .modal-head {
   display: flex;
@@ -820,7 +826,7 @@ button {
     margin: 0 auto;
     width: 210mm;
     min-height: auto;
-    padding: 16mm 18mm;
+    padding: var(--page-pad, 16mm);
   }
   .canvas-block:hover {
     background: none;
