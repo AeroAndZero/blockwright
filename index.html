@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blockwright — Resume Builder</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="index.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.11/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <!-- Toolbar -->
+  <header class="toolbar">
+    <div class="brand">
+      <span class="mark"><span></span></span>
+      <div>Blockwright<small>block-based resume builder</small></div>
+    </div>
+    <div class="toolbar-actions">
+      <span class="pagecount" id="pagecount"></span>
+      <button class="btn btn-ghost-light" id="clear-page-btn" title="Remove all blocks from the page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-9 0v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"/></svg>
+        Clear page
+      </button>
+      <button class="btn btn-primary" id="export-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Export to PDF
+      </button>
+    </div>
+  </header>
+
+  <div class="body">
+    <!-- Left: block library -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-title">Blocks <span class="n" id="lib-count"></span></div>
+        <button class="btn btn-primary btn-block" id="new-block-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+          Create new block
+        </button>
+      </div>
+      <div class="lib-scroll">
+        <div id="lib-list"></div>
+        <p class="lib-hint" id="lib-hint">Grab the handle and drag a block onto the page. Drop it anywhere; reorder by dragging again.</p>
+      </div>
+    </aside>
+
+    <!-- Right: A4 canvas -->
+    <main class="workspace" id="workspace">
+      <section class="page" id="page">
+        <div class="page-inner" id="page-inner"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Create / edit modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <h2 id="modal-title">New block</h2>
+      <div class="title-field">
+        <label for="block-title">Title</label>
+        <input id="block-title" type="text" placeholder="e.g. Work experience, Skills, Header…" maxlength="80" autocomplete="off" />
+      </div>
+    </div>
+    <div class="editor">
+      <div class="pane write">
+        <div class="pane-label">
+          <span>Markdown</span>
+          <a id="sample-link">Insert example</a>
+        </div>
+        <textarea id="md-input" spellcheck="false" placeholder="# Your name&#10;email@example.com · +1 555 000 0000 · City&#10;&#10;## Experience&#10;**Role — Company** *(2021–Present)*&#10;- What you did and the result you drove"></textarea>
+      </div>
+      <div class="pane preview">
+        <div class="pane-label"><span>Live preview</span></div>
+        <div class="preview-scroll"><div class="doc" id="md-preview"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="foot-hint">The title is for your library only — it is never printed on the resume.</span>
+      <div class="foot-actions">
+        <button class="btn btn-quiet" id="cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="save-btn">Save block</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="main.js"></script>
+</body>
+</html>
