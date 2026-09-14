@@ -625,12 +625,12 @@ button {
   background: #fff;
   border-radius: 14px;
   box-shadow: var(--shadow-pop);
-  width: min(1000px, 100%);
+  width: min(1200px, 100%);
   max-height: calc(100vh - 56px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 46vh;
+  height: 75vh;
 }
 .modal-head {
   display: flex;
