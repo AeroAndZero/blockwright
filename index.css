@@ -16,8 +16,8 @@
   --shadow-paper:
     0 1px 2px rgba(20, 24, 33, 0.06), 0 12px 34px rgba(20, 24, 33, 0.14);
   --shadow-pop: 0 18px 50px rgba(20, 24, 33, 0.28);
-  --ui: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  --doc: Georgia, "Times New Roman", serif;
+  --ui: "Inter", system-ui, -apple-system, Segoe UI, "Roboto", sans-serif;
+  --doc: "Roboto", Georgia, "Times New Roman", serif;
   --page-pad: 16mm;
 }
 * {
